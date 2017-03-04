@@ -1,0 +1,37 @@
+# Contributor: Ivan Tham <pickfire@riseup.net>
+# Maintainer: Ivan Tham <pickfire@riseup.net>
+pkgname=fcitx
+pkgver=4.2.9.1
+pkgrel=0
+pkgdesc="Flexible Context-aware Input Tool with eXtension 小企鹅输入法"
+url="https://fcitx-im.org/"
+arch="all"
+license="GPL2"
+depends="pango cairo iso-codes"
+makedepends="libexecinfo-dev libx11-dev libxkbcommon-dev libxkbfile-dev libxml2-dev iso-codes-dev enchant-dev opencc-dev cairo-dev pango-dev gobject-introspection-dev doxygen extra-cmake-modules gtk+2.0-dev gtk+3.0-dev qt-dev"
+install=""
+subpackages="$pkgname-gtk2 $pkgname-gtk3 $pkgname-qt4 $pkgname-dev $pkgname-doc"
+source="https://download.fcitx-im.org/$pkgname/$pkgname-$pkgver.tar.xz"
+builddir="$srcdir/$pkgname-$pkgver/build"
+
+build() {
+	mkdir -p "$builddir" && cd "$builddir"
+	export LDFLAGS="$LDFLAGS -lintl"
+	cmake .. -DCMAKE_BUILD_TYPE=Debug \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DENABLE_GTK2_IM_MODULE=ON \
+		-DENABLE_GTK3_IM_MODULE=ON \
+		-DENABLE_QT_IM_MODULE=ON || return 1
+	make || return 1
+}
+
+check() {
+	cd "$builddir"
+	make test
+}
+
+package() {
+	cd "$builddir"
+}
+
+sha512sums="86e152de3f9ced4bf5f16522cd8bc0818ef28bc1bc9bf86b7b4ae5e5a8049aec73284b721c196eaa62e25fd91a454018fed3a320611c02cfabaaf1ec0534dbe1  fcitx-4.2.9.1.tar.xz"
