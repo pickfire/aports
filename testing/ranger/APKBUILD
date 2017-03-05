@@ -1,0 +1,26 @@
+# Contributor: Ivan Tham <pickfire@riseup.net>
+# Maintainer: Ivan Tham <pickfire@riseup.net>
+pkgname=ranger
+pkgver=1.8.1
+pkgrel=0
+pkgdesc="A VIM-inspired filemanager for the console"
+url="http://ranger.nongnu.org/"
+arch="noarch"
+license="GPL3"
+depends=""
+makedepends="python3-dev"
+subpackages="$pkgname-doc" # TODO: Add subpackages for python2
+source="http://${pkgname}.nongnu.org/${pkgname}-${pkgver}.tar.gz"
+builddir="$srcdir/"$pkgname-$pkgver
+
+check() {
+	cd "$builddir"
+	make test
+}
+
+package() {
+	cd "$builddir"
+	make install DESTDIR="$pkgdir" PYTHON=/usr/bin/python3 || return 1
+}
+
+sha512sums="40450d4e80017ac62d60ea6de231c10496fec1680f15a14006d3b87aae7f34cb2dbb6b810ced89527a4cba2975dcd6c037217e86fa806a0ba3cd39dc7dee8f04  ranger-1.8.1.tar.gz"
