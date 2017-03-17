@@ -18,10 +18,10 @@ subpackages="$pkgname-doc
 	$pkgname-fish-completion:fishcomp
 	$pkgname-zsh-completion:zshcomp"
 source="http://git.zx2c4.com/password-store/snapshot/password-store-${pkgver}.tar.xz"
+builddir="$srcdir/password-store-$pkgver"
 
-_builddir="$srcdir/password-store-$pkgver"
 package() {
-	cd "$_builddir"
+	cd "$builddir"
 	make DESTDIR="$pkgdir" \
 		FORCE_BASHCOMP=1 \
 		FORCE_ZSHCOMP=1 \
@@ -31,7 +31,7 @@ package() {
 contrib() {
 	pkgdesc="contrib files for pass"
 	mkdir -p "$subpkgdir"/usr/share
-	cp -a "$_builddir"/contrib "$subpkgdir"/usr/share/$pkgname
+	cp -a "$builddir"/contrib "$subpkgdir"/usr/share/$pkgname
 }
 
 bashcomp() {
