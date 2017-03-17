@@ -2,8 +2,8 @@
 # Contributor: Johannes Matheis <jomat+alpinebuild@jmt.gr>
 # Maintainer: Johannes Matheis <jomat+alpinebuild@jmt.gr>
 pkgname=pass
-pkgver=1.6.5
-pkgrel=3
+pkgver=1.7
+pkgrel=0
 pkgdesc="Stores, retrieves, generates, and synchronizes passwords securely"
 url="http://zx2c4.com/projects/password-store/"
 arch="noarch"
@@ -18,10 +18,10 @@ subpackages="$pkgname-doc
 	$pkgname-fish-completion:fishcomp
 	$pkgname-zsh-completion:zshcomp"
 source="http://git.zx2c4.com/password-store/snapshot/password-store-${pkgver}.tar.xz"
+builddir="$srcdir/password-store-$pkgver"
 
-_builddir="$srcdir/password-store-$pkgver"
 package() {
-	cd "$_builddir"
+	cd "$builddir"
 	make DESTDIR="$pkgdir" \
 		FORCE_BASHCOMP=1 \
 		FORCE_ZSHCOMP=1 \
@@ -31,7 +31,7 @@ package() {
 contrib() {
 	pkgdesc="contrib files for pass"
 	mkdir -p "$subpkgdir"/usr/share
-	cp -a "$_builddir"/contrib "$subpkgdir"/usr/share/$pkgname
+	cp -a "$builddir"/contrib "$subpkgdir"/usr/share/$pkgname
 }
 
 bashcomp() {
@@ -40,9 +40,8 @@ bashcomp() {
 	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
 	arch="noarch"
 
-	mkdir -p "$subpkgdir"/usr/share/bash-completion/completions
-	mv "$pkgdir"/usr/share/bash-completion/completions/* \
-		"$subpkgdir"/usr/share/bash-completion/completions/ || return 1
+	install -Dm644 "$pkgdir"/usr/share/bash-completion/completions/pass \
+		"$subpkgdir"/usr/share/bash-completion/completions/pass || return 1
 }
 
 fishcomp() {
@@ -51,9 +50,8 @@ fishcomp() {
 	install_if="$pkgname=$pkgver-r$pkgrel fish"
 	arch="noarch"
 
-	mkdir -p "$subpkgdir"/usr/share/fish/completions/
-	mv "$pkgdir"/usr/share/fish/vendor_completions.d/* \
-		"$subpkgdir"/usr/share/fish/completions/ || return 1
+	install -Dm644 "$pkgdir"/usr/share/fish/vendor_completions.d/pass.fish \
+		"$subpkgdir"/usr/share/fish/completions/pass.fish || return 1
 }
 
 zshcomp() {
@@ -62,11 +60,8 @@ zshcomp() {
 	install_if="$pkgname=$pkgver-r$pkgrel zsh"
 	arch="noarch"
 
-	mkdir -p "$subpkgdir/usr/share/zsh/site-functions"
-	mv "$pkgdir"/usr/share/zsh/site-functions/* \
-		"$subpkgdir"/usr/share/zsh/site-functions || return 1
+	install -Dm644 "$pkgdir"/usr/share/zsh/site-functions/_pass \
+		"$subpkgdir"/usr/share/zsh/site-functions/_pass || return 1
 }
 
-md5sums="2c4468360c678184051e76f03c2f6b04  password-store-1.6.5.tar.xz"
-sha256sums="337a39767e6a8e69b2bcc549f27ff3915efacea57e5334c6068fcb72331d7315  password-store-1.6.5.tar.xz"
-sha512sums="e28503b63c6d18a2f45f4a732fdec0380c2ac15e1778136ec5e7ac568662b09183d3ad4fd36ca7e87cfe74540f916cb6365695bdf665a39da4cbe86c4bde7a78  password-store-1.6.5.tar.xz"
+sha512sums="f31fd067f9c6134eac7bb5039df6de3d6fe25c9fcd16d27a0cba159bd7fa9361193081a1fff2000cba1943edbb324e645c6399d4f4aa9f441dd9c67696462a50  password-store-1.7.tar.xz"
