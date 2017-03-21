@@ -2,29 +2,20 @@
 # Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=elinks
 pkgver=0.13
-_ver=${pkgver/_/}
-pkgrel=2
+pkgrel=3
 pkgdesc="a text mode web browser"
 url="http://elinks.or.cz/"
 arch="all"
-license="GPL"
-depends=
+license="GPL2"
 makedepends="bzip2-dev zlib-dev libressl-dev expat-dev gettext-dev"
-install=
 subpackages="$pkgname-doc $pkgname-lang"
 source="http://dev.alpinelinux.org/archive/elinks/elinks-$pkgver.tar.bz2
 	musl-va_copy.patch
 	ssl-Make-RAND_egd-optional.patch"
-
 builddir="$srcdir"/elinks-0.13-20150624
 
 prepare() {
-	cd "$builddir"
-	for i in $source; do
-		case $i in
-		*.patch) msg $i; patch -p1 -i "$srcdir"/$i || return 1;;
-		esac
-	done
+	default_prepare || return 1
 	update_config_sub || return 1
 }
 
@@ -38,6 +29,9 @@ build() {
 		--mandir=/usr/share/man \
 		--infodir=/usr/share/info \
 		--without-included-gettext \
+		--enable-true-color \
+		--enable-256-colol \
+		--enable-fastmem \
 		|| return 1
 	make || return 1
 }
