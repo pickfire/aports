@@ -1,0 +1,25 @@
+# Contributor: Ivan Tham <pickfire@riseup.net>
+# Maintainer: Ivan Tham <pickfire@riseup.net>
+pkgname=libpurple-hangouts
+_pkgname=${pkgname#lib}
+pkgver=20170313
+pkgrel=0
+pkgdesc="Hangouts Plugin for libpurple"
+url="https://bitbucket.org/EionRobb/purple-hangouts"
+arch="all"
+license="GPL3"
+makedepends="pidgin-dev protobuf-c-dev json-glib-dev"
+source="$_pkgname-$pkgver.tar.bz2::https://bitbucket.org/EionRobb/$_pkgname/get/default.tar.bz2"
+builddir=$(echo "$srcdir/"EionRobb-$_pkgname-*)
+
+build() {
+	cd "$builddir"
+	make || return 1
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install || return 1
+}
+
+sha512sums="839b36bb5a8fc84f7eebeac260c47562c6dc47f0f1ec551103a7309cb9b2ad117ab21b4da5aacd62cddeea0c041f43b30e148b2a092d7ce353c18fc0392f0a77  purple-hangouts-20170313.tar.bz2"
