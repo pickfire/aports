@@ -8,20 +8,20 @@ url="https://fcitx-im.org/"
 arch="all"
 license="GPL2"
 depends="pango cairo iso-codes"
-makedepends="libexecinfo-dev libx11-dev libxkbcommon-dev libxkbfile-dev libxml2-dev iso-codes-dev enchant-dev opencc-dev cairo-dev pango-dev gobject-introspection-dev doxygen extra-cmake-modules gtk+2.0-dev gtk+3.0-dev qt-dev"
+makedepends="libexecinfo-dev libx11-dev libxkbcommon-dev libxkbfile-dev libxml2-dev iso-codes-dev enchant-dev opencc-dev cairo-dev pango-dev gobject-introspection-dev doxygen extra-cmake-modules gtk+2.0-dev gtk+3.0-dev"
 install=""
-subpackages="$pkgname-gtk2 $pkgname-gtk3 $pkgname-qt4 $pkgname-dev $pkgname-doc"
+subpackages="$pkgname-gtk2 $pkgname-gtk3 $pkgname-dev $pkgname-doc"
 source="https://download.fcitx-im.org/$pkgname/$pkgname-$pkgver.tar.xz"
-builddir="$srcdir/$pkgname-$pkgver/build"
+builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
 	mkdir -p "$builddir" && cd "$builddir"
 	export LDFLAGS="$LDFLAGS -lintl"
-	cmake .. -DCMAKE_BUILD_TYPE=Debug \
+	cmake . -DENABLE_PRESAGE=OFF \
+		-DENABLE_GETTEXT=OFF \
+		-DENABLE_QT=OFF \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DENABLE_GTK2_IM_MODULE=ON \
-		-DENABLE_GTK3_IM_MODULE=ON \
-		-DENABLE_QT_IM_MODULE=ON || return 1
+		|| return 1
 	make || return 1
 }
 
